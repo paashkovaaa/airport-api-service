@@ -1,6 +1,10 @@
-from django.contrib.auth.models import User
+import os
+import uuid
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 
 
 class Crew(models.Model):
@@ -23,6 +27,7 @@ class Country(models.Model):
 
     class Meta:
         ordering = ["name"]
+        verbose_name_plural = "countries"
 
 
 class City(models.Model):
@@ -34,6 +39,7 @@ class City(models.Model):
 
     class Meta:
         ordering = ["name"]
+        verbose_name_plural = "cities"
 
 
 class Airport(models.Model):
@@ -49,17 +55,25 @@ class Airport(models.Model):
 
 
 class AirplaneType(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
+def airplane_image_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.name)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("uploads/airplanes/", filename)
+
+
 class Airplane(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE, related_name="airplanes")
+    image = models.ImageField(null=True, upload_to=airplane_image_file_path)
 
     @property
     def capacity(self) -> int:
@@ -84,7 +98,7 @@ class Route(models.Model):
 class Flight(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="flights")
     airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE, related_name="flights")
-    crews = models.ManyToManyField(Crew, related_name="flights")
+    crew = models.ManyToManyField(Crew, related_name="flights", blank=True)
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
 
@@ -102,10 +116,10 @@ class Flight(models.Model):
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
 
     def __str__(self):
-        return f"Order {self.id}: {self.user.last_name} {self.user.first_name}"
+        return str(self.created_at)
 
     class Meta:
         ordering = ["-created_at"]
