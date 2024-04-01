@@ -8,8 +8,10 @@ from airport.models import (Country,
                             Route,
                             Flight,
                             Order,
-                            Ticket)
+                            Ticket,
+                            Crew)
 
+admin.site.register(Crew)
 admin.site.register(Country)
 admin.site.register(City)
 admin.site.register(Airport)
