@@ -8,31 +8,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('airport', '0003_alter_order_user_alter_ticket_unique_together_and_more'),
+        ("airport", "0003_alter_order_user_alter_ticket_unique_together_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='city',
-            options={'ordering': ['name'], 'verbose_name_plural': 'cities'},
+            name="city",
+            options={"ordering": ["name"], "verbose_name_plural": "cities"},
         ),
         migrations.AlterModelOptions(
-            name='country',
-            options={'ordering': ['name'], 'verbose_name_plural': 'countries'},
+            name="country",
+            options={"ordering": ["name"], "verbose_name_plural": "countries"},
         ),
         migrations.RemoveField(
-            model_name='flight',
-            name='crews',
+            model_name="flight",
+            name="crews",
         ),
         migrations.AddField(
-            model_name='flight',
-            name='crew',
-            field=models.ManyToManyField(blank=True, related_name='flights', to='airport.crew'),
+            model_name="flight",
+            name="crew",
+            field=models.ManyToManyField(blank=True, related_name="flights", to="airport.crew"),
         ),
         migrations.AlterField(
-            model_name='order',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='orders', to=settings.AUTH_USER_MODEL),
+            model_name="order",
+            name="user",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="orders", to=settings.AUTH_USER_MODEL),
         ),
     ]

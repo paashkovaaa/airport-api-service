@@ -156,7 +156,9 @@ class FlightDetailSerializer(FlightSerializer):
     crew = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="full_name"
     )
-    airplane_image = serializers.ImageField(source="airplane.image", read_only=True)
+    airplane_image = serializers.ImageField(
+        source="airplane.image", read_only=True
+    )
 
     class Meta:
         model = Flight

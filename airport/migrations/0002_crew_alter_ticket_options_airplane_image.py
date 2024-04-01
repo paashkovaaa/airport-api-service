@@ -7,25 +7,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('airport', '0001_initial'),
+        ("airport", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Crew',
+            name="Crew",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=255)),
-                ('last_name', models.CharField(max_length=255)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("first_name", models.CharField(max_length=255)),
+                ("last_name", models.CharField(max_length=255)),
             ],
         ),
         migrations.AlterModelOptions(
-            name='ticket',
-            options={'ordering': ['row', 'seat']},
+            name="ticket",
+            options={"ordering": ["row", "seat"]},
         ),
         migrations.AddField(
-            model_name='airplane',
-            name='image',
+            model_name="airplane",
+            name="image",
             field=models.ImageField(null=True, upload_to=airport.models.airplane_image_file_path),
         ),
     ]

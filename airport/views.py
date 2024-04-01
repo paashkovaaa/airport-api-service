@@ -123,7 +123,9 @@ class AirplaneViewSet(
         airplane_types = self.request.query_params.get("airplane_types")
         capacity_gte = self.request.query_params.get("capacity_gte")
 
-        queryset = self.queryset.annotate(total_capacity=F("rows") * F("seats_in_row"))
+        queryset = self.queryset.annotate(
+            total_capacity=F("rows") * F("seats_in_row")
+        )
 
         if name:
             queryset = queryset.filter(name__icontains=name)
@@ -159,12 +161,13 @@ class AirplaneViewSet(
             OpenApiParameter(
                 "airplane_types",
                 type={"type": "list", "items": {"type": "number"}},
-                description="Filter by airplane_type ids (ex. ?airplane_types=2,1)",
+                description="Filter by airplane_type ids "
+                            "(ex. ?airplane_types=1,2)",
             ),
             OpenApiParameter(
                 "name",
                 type=OpenApiTypes.STR,
-                description="Filter by airplane name (ex. ?name=embraer)",
+                description="Filter by airplane name (ex. ?name=Airplane)",
             ),
             OpenApiParameter(
                 "capacity_gte",
@@ -205,11 +208,13 @@ class FlightViewSet(
 ):
     queryset = (
         Flight.objects.all()
-        .select_related("route__source", "route__destination", "airplane__airplane_type")
+        .select_related("route__source",
+                        "route__destination",
+                        "airplane__airplane_type")
         .annotate(
             tickets_available=(
-                    F("airplane__rows") * F("airplane__seats_in_row")
-                    - Count("tickets")
+                F("airplane__rows") * F("airplane__seats_in_row")
+                - Count("tickets")
             )
         )
     )

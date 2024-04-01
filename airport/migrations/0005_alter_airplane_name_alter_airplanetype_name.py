@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('airport', '0004_alter_city_options_alter_country_options_and_more'),
+        ("airport", "0004_alter_city_options_alter_country_options_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='airplane',
-            name='name',
+            model_name="airplane",
+            name="name",
             field=models.CharField(max_length=255),
         ),
         migrations.AlterField(
-            model_name='airplanetype',
-            name='name',
+            model_name="airplanetype",
+            name="name",
             field=models.CharField(max_length=255),
         ),
     ]
